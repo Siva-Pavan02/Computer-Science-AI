@@ -35,11 +35,24 @@ Respond clearly and concisely. Focus on providing accurate, educational informat
 Include examples when helpful. Format code snippets properly for easy reading. Use professional language but be friendly and approachable.
 """
 
+def get_welcome_message():
+    """Returns the welcome message for new users"""
+    return "Welcome to the Computer Science AI Assistant! I'm ready to help with any Computer Science related questions you have."
+
 @app.route('/')
 def index():
     # Initialize or clear session data for a new conversation
     if 'chat_history' not in session:
         session['chat_history'] = []
+        
+        # Only add welcome message if this is a brand new session
+        if len(session['chat_history']) == 0:
+            welcome_message = get_welcome_message()
+            session['chat_history'].append({
+                'role': 'assistant',
+                'content': welcome_message
+            })
+            session.modified = True
     
     return render_template('index.html', 
                            chat_history=session['chat_history'])

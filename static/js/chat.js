@@ -12,18 +12,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${isUser ? 'user-message' : 'assistant-message'}`;
         
-        const headerDiv = document.createElement('div');
-        headerDiv.className = 'message-header';
-        headerDiv.innerHTML = `<strong>${isUser ? 'You' : 'Assistant'}</strong>`;
-        
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
         // Handle newlines by converting them to <br> elements
         contentDiv.innerHTML = content.replace(/\n/g, '<br>');
         
-        messageDiv.appendChild(headerDiv);
         messageDiv.appendChild(contentDiv);
-        
         chatMessages.appendChild(messageDiv);
         
         // Scroll to bottom
@@ -76,8 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 // Add error message
                 const errorDiv = document.createElement('div');
-                errorDiv.className = 'chat-message system-message';
-                errorDiv.innerHTML = `<div class="message-content text-danger">
+                errorDiv.className = 'chat-message error-message';
+                errorDiv.innerHTML = `<div class="message-content">
                     <i class="fas fa-exclamation-triangle me-2"></i>${data.response}
                 </div>`;
                 chatMessages.appendChild(errorDiv);
@@ -90,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add error message
             const errorDiv = document.createElement('div');
-            errorDiv.className = 'chat-message system-message';
-            errorDiv.innerHTML = `<div class="message-content text-danger">
+            errorDiv.className = 'chat-message error-message';
+            errorDiv.innerHTML = `<div class="message-content">
                 <i class="fas fa-exclamation-triangle me-2"></i>An error occurred while communicating with the server.
             </div>`;
             chatMessages.appendChild(errorDiv);
@@ -126,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Add a message about clearing the chat
                 const clearDiv = document.createElement('div');
-                clearDiv.className = 'chat-message system-message';
+                clearDiv.className = 'chat-message status-message';
                 clearDiv.innerHTML = `<div class="message-content">
                     <i class="fas fa-check me-2"></i>Chat history has been cleared.
                 </div>`;

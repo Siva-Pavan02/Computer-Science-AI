@@ -13,49 +13,14 @@
 </head>
 <body>
     <div class="container-fluid vh-100 d-flex flex-column">
-        <header class="row py-3 app-header">
-            <div class="col-12 d-flex justify-content-center align-items-center">
-                <div class="header-logo">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="header-title">
-                    <h1 class="mb-0">Computer Science AI Assistant</h1>
-                    <div class="header-subtitle">Your expert guide to computer science concepts</div>
-                </div>
-            </div>
-        </header>
-
         <div class="row flex-grow-1">
             <!-- Main chat area -->
-            <div class="col-12 d-flex flex-column bg-dark chat-container">
+            <div class="col-12 d-flex flex-column chat-container">
                 <!-- Chat messages -->
                 <div id="chat-messages" class="flex-grow-1 p-3 overflow-auto">
-                    <!-- System welcome message -->
-                    <div class="chat-message system-message welcome-message">
-                        <div class="message-header">
-                            <strong><i class="fas fa-robot me-2"></i>Computer Science Assistant</strong>
-                        </div>
-                        <div class="message-content">
-                            <p class="welcome-title">👋 Welcome to your Computer Science AI Assistant!</p>
-                            <p>I'm here to help with all your Computer Science questions, including:</p>
-                            <ul class="topic-list">
-                                <li><span class="topic-icon"><i class="fas fa-code"></i></span> Programming languages & paradigms</li>
-                                <li><span class="topic-icon"><i class="fas fa-project-diagram"></i></span> Data structures & algorithms</li>
-                                <li><span class="topic-icon"><i class="fas fa-database"></i></span> Databases & data management</li>
-                                <li><span class="topic-icon"><i class="fas fa-network-wired"></i></span> Computer networks</li>
-                                <li><span class="topic-icon"><i class="fas fa-microchip"></i></span> Computer architecture</li>
-                                <li><span class="topic-icon"><i class="fas fa-brain"></i></span> Artificial intelligence & machine learning</li>
-                            </ul>
-                            <p class="welcome-prompt">What would you like to learn about today?</p>
-                        </div>
-                    </div>
-
                     <!-- Existing chat history -->
                     {% for message in chat_history %}
                         <div class="chat-message {% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
-                            <div class="message-header">
-                                <strong>{% if message.role == 'user' %}You{% else %}Assistant{% endif %}</strong>
-                            </div>
                             <div class="message-content">
                                 {{ message.content|safe }}
                             </div>
@@ -64,44 +29,41 @@
                 </div>
 
                 <!-- Typing indicator (hidden by default) -->
-                <div id="typing-indicator" class="typing-indicator p-3 border-top" style="display: none;">
+                <div id="typing-indicator" class="typing-indicator p-2" style="display: none;">
                     <div class="typing-animation">
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
                     </div>
-                    <span class="ms-2">Assistant is typing...</span>
                 </div>
 
                 <!-- Controls area -->
-                <div class="p-4 border-top input-container">
-                    <div class="mb-3 d-flex justify-content-between align-items-center">
-                        <div class="form-text">
-                            <i class="fas fa-info-circle me-1 text-primary"></i>
-                            Only Computer Science related questions will be answered.
-                        </div>
-                        <button id="clear-btn" class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-trash-alt me-2"></i> Clear Chat
+                <div class="input-container">
+                    <div class="d-flex justify-content-end clearfix mb-2">
+                        <button id="clear-btn" class="btn-clear">
+                            <i class="fas fa-trash-alt me-1"></i> Clear Chat
                         </button>
                     </div>
                     
                     <form id="chat-form" class="d-flex">
-                        <div class="input-group">
-                            <textarea 
-                                id="user-input" 
-                                class="form-control" 
-                                placeholder="Ask about algorithms, programming languages, data structures..."
-                                rows="2"
-                                required
-                            ></textarea>
-                            <button type="submit" class="btn btn-primary" id="send-btn">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
+                        <div class="chat-input-wrapper">
+                            <div class="input-info">
+                                <i class="fas fa-info-circle"></i> Only Computer Science related questions will be answered.
+                            </div>
+                            <div class="input-group">
+                                <textarea 
+                                    id="user-input" 
+                                    class="form-control" 
+                                    placeholder="Ask a Computer Science question..."
+                                    rows="1"
+                                    required
+                                ></textarea>
+                                <button type="submit" id="send-btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
                         </div>
                     </form>
-                    <div class="mt-2 text-end small keyboard-hint">
-                        <span class="badge bg-dark">Ctrl + Enter</span> to send
-                    </div>
                 </div>
             </div>
         </div>
