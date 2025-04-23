@@ -5,13 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendButton = document.getElementById('send-btn');
     const chatMessages = document.getElementById('chat-messages');
     const clearButton = document.getElementById('clear-btn');
-    const roleButtons = document.querySelectorAll('.role-btn');
-    const currentRoleDisplay = document.getElementById('current-role');
     const typingIndicator = document.getElementById('typing-indicator');
-    
-    // Initialize current role from the server
-    const initialRole = currentRoleDisplay.textContent.trim();
-    highlightActiveRole(initialRole);
     
     // Function to add a new message to the chat
     function addMessage(content, isUser = false) {
@@ -53,12 +47,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Clear input
         userInput.value = '';
+        userInput.style.height = 'auto';
         
         // Show typing indicator
         typingIndicator.style.display = 'flex';
-        
-        // Get current role
-        const currentRole = currentRoleDisplay.textContent;
         
         try {
             // Send message to server
@@ -69,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({
                     message: message,
-                    role: currentRole
+                    role: 'default'  // Fixed role since we removed role selection
                 })
             });
             
@@ -131,64 +123,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 while (chatMessages.children.length > 1) {
                     chatMessages.removeChild(chatMessages.lastChild);
                 }
+                
+                // Add a message about clearing the chat
+                const clearDiv = document.createElement('div');
+                clearDiv.className = 'chat-message system-message';
+                clearDiv.innerHTML = `<div class="message-content">
+                    <i class="fas fa-check me-2"></i>Chat history has been cleared.
+                </div>`;
+                chatMessages.appendChild(clearDiv);
+                
+                // Scroll to bottom
+                scrollToBottom();
             }
         } catch (error) {
             console.error('Error clearing chat:', error);
         }
     });
-    
-    // Role selection
-    roleButtons.forEach(button => {
-        button.addEventListener('click', async function() {
-            const newRole = this.getAttribute('data-role');
-            
-            try {
-                const response = await fetch('/set_role', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        role: newRole
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Update the displayed role
-                    currentRoleDisplay.textContent = newRole;
-                    
-                    // Add system message about role change
-                    const roleChangeDiv = document.createElement('div');
-                    roleChangeDiv.className = 'chat-message system-message';
-                    roleChangeDiv.innerHTML = `<div class="message-content">
-                        <i class="fas fa-sync-alt me-2"></i>Role changed to <strong>${newRole}</strong>.
-                    </div>`;
-                    chatMessages.appendChild(roleChangeDiv);
-                    
-                    // Highlight active role button
-                    highlightActiveRole(newRole);
-                    
-                    // Scroll to bottom
-                    scrollToBottom();
-                }
-            } catch (error) {
-                console.error('Error changing role:', error);
-            }
-        });
-    });
-    
-    // Function to highlight the active role button
-    function highlightActiveRole(role) {
-        roleButtons.forEach(btn => {
-            if (btn.getAttribute('data-role') === role) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
     
     // Enable textarea autosize
     userInput.addEventListener('input', function() {

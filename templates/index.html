@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS Role-Based Chatbot with Gemini</title>
+    <title>Computer Science AI Assistant</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
@@ -13,62 +13,25 @@
 </head>
 <body>
     <div class="container-fluid vh-100 d-flex flex-column">
-        <header class="row py-3 bg-dark">
+        <header class="row py-3 bg-dark border-bottom border-secondary">
             <div class="col-12 text-center">
                 <h1 class="h3">
-                    <i class="fas fa-robot me-2"></i>
-                    Computer Science Role-Based Chatbot
+                    <i class="fas fa-robot me-2 text-info"></i>
+                    Computer Science AI Assistant
                 </h1>
             </div>
         </header>
 
         <div class="row flex-grow-1">
-            <!-- Sidebar for role selection -->
-            <div class="col-md-3 col-lg-2 bg-dark p-3 border-end">
-                <div class="mb-4">
-                    <h5>Choose Your Role</h5>
-                    <p class="small text-muted">Select a role to interact with the chatbot</p>
-                    
-                    <div class="list-group">
-                        <button type="button" class="list-group-item list-group-item-action role-btn" data-role="Student">
-                            <i class="fas fa-user-graduate me-2"></i> Student
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action role-btn" data-role="Teacher">
-                            <i class="fas fa-chalkboard-teacher me-2"></i> Teacher
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action role-btn" data-role="AI Researcher">
-                            <i class="fas fa-microscope me-2"></i> AI Researcher
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action role-btn" data-role="Developer">
-                            <i class="fas fa-code me-2"></i> Developer
-                        </button>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <h5>Current Role</h5>
-                    <div class="current-role-display p-2 border rounded">
-                        <i class="fas fa-user me-2"></i>
-                        <span id="current-role">{{ current_role }}</span>
-                    </div>
-                </div>
-
-                <div class="d-grid gap-2">
-                    <button id="clear-btn" class="btn btn-outline-danger">
-                        <i class="fas fa-trash-alt me-2"></i> Clear Chat
-                    </button>
-                </div>
-            </div>
-
             <!-- Main chat area -->
-            <div class="col-md-9 col-lg-10 d-flex flex-column bg-dark chat-container">
+            <div class="col-12 d-flex flex-column bg-dark chat-container">
                 <!-- Chat messages -->
                 <div id="chat-messages" class="flex-grow-1 p-3 overflow-auto">
                     <!-- System welcome message -->
                     <div class="chat-message system-message">
                         <div class="message-content">
-                            <p>Welcome to the Computer Science Role-Based Chatbot! Your current role is: <strong>{{ current_role }}</strong>.</p>
-                            <p>I can answer your Computer Science questions with responses tailored to your role.</p>
+                            <p>Welcome to the Computer Science AI Assistant!</p>
+                            <p>I can answer your questions about programming, algorithms, data structures, computer architecture, and other computer science topics.</p>
                             <p>What would you like to know about Computer Science today?</p>
                         </div>
                     </div>
@@ -96,8 +59,14 @@
                     <span class="ms-2">Assistant is typing...</span>
                 </div>
 
-                <!-- Input area -->
-                <div class="p-3 border-top">
+                <!-- Controls area -->
+                <div class="p-3 border-top bg-dark-subtle">
+                    <div class="mb-3 d-flex justify-content-end">
+                        <button id="clear-btn" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash-alt me-2"></i> Clear Chat
+                        </button>
+                    </div>
+                    
                     <form id="chat-form" class="d-flex">
                         <textarea 
                             id="user-input" 
@@ -111,7 +80,7 @@
                         </button>
                     </form>
                     <div class="form-text mt-2">
-                        <i class="fas fa-info-circle me-1"></i>
+                        <i class="fas fa-info-circle me-1 text-info"></i>
                         Only Computer Science related questions will be answered.
                     </div>
                 </div>
