@@ -1,0 +1,128 @@
+/* Main layout */
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.chat-container {
+    height: calc(100vh - 80px);
+}
+
+/* Chat messages */
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.chat-message {
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 85%;
+    margin-bottom: 10px;
+}
+
+.system-message {
+    background-color: var(--bs-secondary-bg);
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin: 0 auto 20px auto;
+    width: 100%;
+    border-left: 4px solid var(--bs-info);
+}
+
+.user-message {
+    background-color: var(--bs-primary-bg-subtle);
+    border: 1px solid var(--bs-primary-border-subtle);
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.assistant-message {
+    background-color: var(--bs-secondary-bg);
+    border: 1px solid var(--bs-secondary-border-subtle);
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+.message-header {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-bottom: 6px;
+}
+
+.message-content {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+}
+
+/* Role styling */
+.current-role-display {
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+    font-weight: bold;
+}
+
+.role-btn.active {
+    background-color: var(--bs-primary);
+    color: white;
+    border-color: var(--bs-primary);
+}
+
+/* Typing indicator */
+.typing-indicator {
+    background-color: var(--bs-dark);
+}
+
+.typing-animation {
+    display: inline-flex;
+    align-items: center;
+}
+
+.typing-animation .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--bs-light);
+    margin-right: 4px;
+    animation: bounce 1.3s linear infinite;
+}
+
+.typing-animation .dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-animation .dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Form styling */
+#chat-form {
+    position: relative;
+}
+
+#user-input {
+    resize: none;
+}
+
+#send-btn {
+    align-self: flex-end;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chat-message {
+        max-width: 90%;
+    }
+}
