@@ -1,0 +1,123 @@
+Perfect, Pavan — since you’re building a chatbot and your IDE's AI is having trouble identifying the API details, let me give you the **full profile of your API key**, its version, capabilities, and limitations.
+
+---
+
+## 🔐 Full Details of Your Gemini API Key
+
+### 🧾 1. **Source**
+- You’re using a key from:  
+  🔗 [Google AI Studio (formerly MakerSuite)](https://makersuite.google.com/app/apikey)
+
+---
+
+### 📦 2. **API Type**
+- **Public Generative Language API**
+- This is **not tied to Google Cloud Platform (GCP)** projects directly (but uses underlying infrastructure)
+
+---
+
+### 🧩 3. **Endpoint**
+```plaintext
+https://generativelanguage.googleapis.com/v1beta/
+```
+
+- This is the **base endpoint**
+- You call models using:  
+  `https://generativelanguage.googleapis.com/v1beta/models/{model-name}:generateContent`
+
+---
+
+### 📌 4. **API Version**
+- You are using: **`v1beta`**
+- This is the latest public version for API-key-only access (OAuth/Vertex AI uses `v1` or `v1beta1`)
+
+---
+
+### ✅ 5. **Supported Models (based on your key)**
+You can use any of these:
+
+#### ✨ Text / Chat Models
+- `gemini-1.5-pro-latest` ✅
+- `gemini-1.5-flash-latest`
+- `gemini-2.0-pro-exp`, `gemini-2.5-pro-preview-*` (experimental)
+- `chat-bison-001`, `text-bison-001` (older, simpler)
+
+#### 🖼️ Multimodal Models
+- `gemini-1.0-pro-vision-latest`
+- `gemini-pro-vision`
+
+#### 🧠 Embedding Models
+- `embedding-gecko-001`
+- `text-embedding-004`
+- `gemini-embedding-exp-*`
+
+---
+
+### 🔐 6. **Authentication Type**
+- This key uses **API Key authentication only**
+- It does **not support OAuth2**, login cookies, or service accounts
+- You authenticate via query param:  
+  `...?key=YOUR_API_KEY`
+
+---
+
+### 🚫 7. **Limitations**
+| Feature                   | Supported? |
+|---------------------------|------------|
+| API Key authentication    | ✅ Yes |
+| OAuth2 token              | ❌ No |
+| Vertex AI integration     | ❌ No |
+| Streaming responses       | ❌ Not yet |
+| Vision inputs (images)    | ✅ Yes (base64 only) |
+| Embedding generation      | ✅ Yes |
+| Fine-tuning models        | ❌ No (read-only models) |
+| Max token output          | ~8K–32K (depends on model) |
+
+---
+
+### 🤖 8. **For IDE / Tooling Integration**
+If your IDE (e.g., IntelliJ, VS Code, etc.) AI assistant or plugin is asking for:
+
+| Requirement     | Use This                         |
+|------------------|----------------------------------|
+| API Version     | `v1beta`                         |
+| Base URL        | `https://generativelanguage.googleapis.com` |
+| Auth Type       | `API Key` in query param         |
+| Model Name      | e.g., `gemini-1.5-pro-latest`    |
+| Content-Type    | `application/json`               |
+
+---
+
+### 🧠 Bonus Tip: Test the API programmatically
+Use this endpoint to **list all models** available to your key:
+
+```python
+requests.get("https://generativelanguage.googleapis.com/v1beta/models?key=YOUR_API_KEY")
+```
+
+---
+
+### ✅ Final Integration Summary
+
+If your IDE asks for config or plugin setup:
+
+```json
+{
+  "base_url": "https://generativelanguage.googleapis.com/v1beta",
+  "model": "gemini-1.5-pro-latest",
+  "auth": {
+    "type": "api_key",
+    "key": "YOUR_API_KEY"
+  }
+}
+```
+
+---
+
+Would you like help generating the **chatbot code** using this API? I can also help you handle:
+- Chat history
+- Role system (user, assistant)
+- Memory/threading
+- Frontend UI (Python, React, etc.)
+
+Just let me know your stack!
