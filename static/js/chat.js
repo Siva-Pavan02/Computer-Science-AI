@@ -8,14 +8,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const typingIndicator = document.getElementById('typing-indicator');
     
     // Function to add a new message to the chat
-    function addMessage(content, isUser = false) {
+    function addMessage(content, isUser = false, isFormatted = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${isUser ? 'user-message' : 'assistant-message'}`;
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
-        // Handle newlines by converting them to <br> elements
-        contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+        
+        // If content is already formatted (has HTML), use it directly
+        // Otherwise handle newlines by converting them to <br> elements
+        if (isFormatted) {
+            contentDiv.innerHTML = content;
+        } else {
+            contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+        }
         
         messageDiv.appendChild(contentDiv);
         chatMessages.appendChild(messageDiv);
@@ -65,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
             typingIndicator.style.display = 'none';
             
             if (data.success) {
-                // Add assistant response to chat
-                addMessage(data.response);
+                // Add assistant response to chat (the backend already formatted it)
+                addMessage(data.response, false, true);
             } else {
                 // Add error message
                 const errorDiv = document.createElement('div');

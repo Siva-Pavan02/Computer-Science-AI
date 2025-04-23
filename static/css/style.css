@@ -91,6 +91,54 @@ body {
     font-size: 0.95rem;
 }
 
+/* Formatted text elements */
+.code-block {
+    background-color: #232838;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 10px 0;
+    overflow-x: auto;
+    border-left: 3px solid #7966F6;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #d4d4d4;
+}
+
+.inline-code {
+    background-color: #232838;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9em;
+    color: #d4d4d4;
+}
+
+.response-heading {
+    margin: 16px 0 8px;
+    color: #7966F6;
+    font-weight: 600;
+}
+
+.message-content ul, .message-content ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.message-content li {
+    margin-bottom: 5px;
+}
+
+.message-content strong {
+    color: #95A1C8;
+    font-weight: 600;
+}
+
+.message-content em {
+    font-style: italic;
+    color: #8E939F;
+}
+
 /* Typing indicator */
 .typing-indicator {
     background-color: transparent;

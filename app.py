@@ -37,7 +37,62 @@ Include examples when helpful. Format code snippets properly for easy reading. U
 
 def get_welcome_message():
     """Returns the welcome message for new users"""
-    return "Welcome to the Computer Science AI Assistant! I'm ready to help with any Computer Science related questions you have."
+    welcome_text = "Welcome to the Computer Science AI Assistant! I'm ready to help with any Computer Science related questions you have."
+    return format_response(welcome_text)
+
+def format_response(text):
+    """
+    Format the AI response for better display:
+    - Properly format code blocks with syntax highlighting
+    - Format lists, headings, etc.
+    """
+    import re
+    
+    # Format code blocks (```code```)
+    pattern = r'```(?:\w+)?\n([\s\S]*?)\n```'
+    replacement = r'<pre class="code-block"><code>\1</code></pre>'
+    text = re.sub(pattern, replacement, text)
+    
+    # Format inline code (`code`)
+    pattern = r'`([^`\n]+?)`'
+    replacement = r'<code class="inline-code">\1</code>'
+    text = re.sub(pattern, replacement, text)
+    
+    # Format headers (# Header)
+    pattern = r'^(#{1,6})\s+(.+)$'
+    
+    def header_replacer(match):
+        level = len(match.group(1))
+        header_text = match.group(2)
+        return f'<h{level} class="response-heading">{header_text}</h{level}>'
+    
+    text = re.sub(pattern, header_replacer, text, flags=re.MULTILINE)
+    
+    # Format unordered lists
+    pattern = r'^(\s*)-\s+(.+)$'
+    replacement = r'<ul><li>\2</li></ul>'
+    text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
+    
+    # Format ordered lists
+    pattern = r'^(\s*)\d+\.\s+(.+)$'
+    replacement = r'<ol><li>\2</li></ol>'
+    text = re.sub(pattern, replacement, text, flags=re.MULTILINE)
+    
+    # Fix consecutive list items (remove redundant opening/closing tags)
+    text = re.sub(r'</ul>\s*<ul>', '', text)
+    text = re.sub(r'</ol>\s*<ol>', '', text)
+    
+    # Format strong/bold (**text**)
+    pattern = r'\*\*([^*]+?)\*\*'
+    replacement = r'<strong>\1</strong>'
+    text = re.sub(pattern, replacement, text)
+    
+    # Format emphasis/italic (*text*)
+    pattern = r'\*([^*]+?)\*'
+    replacement = r'<em>\1</em>'
+    text = re.sub(pattern, replacement, text)
+    
+    return text
 
 @app.route('/')
 def index():
@@ -104,17 +159,20 @@ def chat():
             response_data = response.json()
             ai_response = response_data.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', '')
             
+            # Format the AI response for better display
+            formatted_response = format_response(ai_response)
+            
             # Add AI response to chat history
             session['chat_history'].append({
                 'role': 'assistant',
-                'content': ai_response
+                'content': formatted_response
             })
             
             # Save session
             session.modified = True
             
             return jsonify({
-                'response': ai_response,
+                'response': formatted_response,
                 'success': True
             })
         else:
