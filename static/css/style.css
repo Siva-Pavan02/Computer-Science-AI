@@ -146,16 +146,22 @@ body {
 }
 
 /* Welcome message special styling */
-.assistant-message:first-child {
-    text-align: center;
-    margin: 30px 0;
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.welcome-info {
+    color: #8E939F;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-.assistant-message:first-child .message-content {
-    font-size: 1.1rem;
-    line-height: 1.7;
+.welcome-text {
+    display: flex;
+    align-items: center;
+}
+
+.welcome-text i {
+    color: #7966F6;
+    margin-right: 8px;
 }
 
 /* Typing indicator */

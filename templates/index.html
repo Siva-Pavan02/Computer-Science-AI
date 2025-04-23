@@ -18,14 +18,32 @@
             <div class="col-12 d-flex flex-column chat-container">
                 <!-- Chat messages -->
                 <div id="chat-messages" class="flex-grow-1 p-3 overflow-auto">
-                    <!-- Existing chat history -->
-                    {% for message in chat_history %}
-                        <div class="chat-message {% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
-                            <div class="message-content">
-                                {{ message.content|safe }}
+                    <!-- Welcome message at top -->
+                    {% if chat_history and chat_history[0].role == 'assistant' %}
+                        <div class="welcome-info mb-4">
+                            <div class="welcome-text">
+                                {{ chat_history[0].content|safe }}
                             </div>
                         </div>
-                    {% endfor %}
+                        
+                        <!-- Rest of chat history (skip the first welcome message) -->
+                        {% for message in chat_history[1:] %}
+                            <div class="chat-message {% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+                                <div class="message-content">
+                                    {{ message.content|safe }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- No welcome message found, show entire history -->
+                        {% for message in chat_history %}
+                            <div class="chat-message {% if message.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+                                <div class="message-content">
+                                    {{ message.content|safe }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
                 <!-- Typing indicator (hidden by default) -->

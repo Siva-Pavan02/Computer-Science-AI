@@ -38,9 +38,7 @@ Include examples when helpful. Format code snippets properly for easy reading. U
 def get_welcome_message():
     """Returns the welcome message for new users"""
     # Don't use format_response here, we want a simple text welcome message
-    return """Welcome to the Computer Science AI Assistant!
-
-I'm ready to help with any Computer Science related questions you have."""
+    return """<i class="fas fa-info-circle me-2"></i> Only Computer Science related questions will be answered."""
 
 def format_response(text):
     """

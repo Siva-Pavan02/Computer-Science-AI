@@ -160,7 +160,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Add welcome message after clearing
                 if (data.welcome_message) {
-                    addMessage(data.welcome_message, false, false);
+                    // Create welcome info element
+                    const welcomeDiv = document.createElement('div');
+                    welcomeDiv.className = 'welcome-info mb-4';
+                    welcomeDiv.innerHTML = `<div class="welcome-text">${data.welcome_message}</div>`;
+                    chatMessages.appendChild(welcomeDiv);
                 }
                 
                 // Scroll to bottom
