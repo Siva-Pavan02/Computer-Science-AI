@@ -145,9 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             
             if (data.success) {
-                // Clear the chat messages (except for system welcome)
-                while (chatMessages.children.length > 1) {
-                    chatMessages.removeChild(chatMessages.lastChild);
+                // Clear all chat messages
+                while (chatMessages.firstChild) {
+                    chatMessages.removeChild(chatMessages.firstChild);
                 }
                 
                 // Add a message about clearing the chat
@@ -157,6 +157,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     <i class="fas fa-check me-2"></i>Chat history has been cleared.
                 </div>`;
                 chatMessages.appendChild(clearDiv);
+                
+                // Add welcome message after clearing
+                if (data.welcome_message) {
+                    addMessage(data.welcome_message, false, false);
+                }
                 
                 // Scroll to bottom
                 scrollToBottom();

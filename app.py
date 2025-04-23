@@ -37,8 +37,10 @@ Include examples when helpful. Format code snippets properly for easy reading. U
 
 def get_welcome_message():
     """Returns the welcome message for new users"""
-    welcome_text = "Welcome to the Computer Science AI Assistant! I'm ready to help with any Computer Science related questions you have."
-    return format_response(welcome_text)
+    # Don't use format_response here, we want a simple text welcome message
+    return """Welcome to the Computer Science AI Assistant!
+
+I'm ready to help with any Computer Science related questions you have."""
 
 def format_response(text):
     """
@@ -213,11 +215,20 @@ def chat():
 def clear_chat():
     # Clear the chat history in the session
     session['chat_history'] = []
+    
+    # Add welcome message after clearing
+    welcome_message = get_welcome_message()
+    session['chat_history'].append({
+        'role': 'assistant',
+        'content': welcome_message
+    })
+    
     session.modified = True
     
     return jsonify({
         'success': True,
-        'message': 'Chat history cleared'
+        'message': 'Chat history cleared',
+        'welcome_message': welcome_message
     })
 
 if __name__ == '__main__':
