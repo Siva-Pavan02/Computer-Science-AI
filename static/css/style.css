@@ -55,6 +55,24 @@ body {
     margin: 8px 0;
 }
 
+.retry-timer {
+    font-size: 0.85rem;
+    margin-top: 10px;
+    padding: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+}
+
+.countdown {
+    font-weight: bold;
+    color: #FF8B94;
+    font-family: monospace;
+    background-color: rgba(220, 53, 69, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
 .status-message {
     background-color: rgba(25, 135, 84, 0.1);
     color: #4AD295;

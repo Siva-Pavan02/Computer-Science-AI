@@ -71,9 +71,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Add error message
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'chat-message error-message';
-                errorDiv.innerHTML = `<div class="message-content">
-                    <i class="fas fa-exclamation-triangle me-2"></i>${data.response}
-                </div>`;
+                
+                // Check if there's a retry_after value for rate limiting
+                if (data.retry_after) {
+                    const retrySeconds = data.retry_after;
+                    errorDiv.innerHTML = `<div class="message-content">
+                        <i class="fas fa-exclamation-triangle me-2"></i>${data.response}
+                        <div class="retry-timer mt-2" data-seconds="${retrySeconds}">
+                            Please wait <span class="countdown">${retrySeconds}</span> seconds before trying again.
+                        </div>
+                    </div>`;
+                    
+                    // Start countdown timer
+                    const countdownEl = errorDiv.querySelector('.countdown');
+                    let secondsLeft = retrySeconds;
+                    const countdownTimer = setInterval(() => {
+                        secondsLeft--;
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownTimer);
+                            errorDiv.querySelector('.retry-timer').textContent = "You can try again now.";
+                        } else {
+                            countdownEl.textContent = secondsLeft;
+                        }
+                    }, 1000);
+                } else {
+                    errorDiv.innerHTML = `<div class="message-content">
+                        <i class="fas fa-exclamation-triangle me-2"></i>${data.response}
+                    </div>`;
+                }
+                
                 chatMessages.appendChild(errorDiv);
             }
         } catch (error) {

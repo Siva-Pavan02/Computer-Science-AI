@@ -122,9 +122,21 @@ def chat():
             
             # Handle rate limiting more gracefully
             if response.status_code == 429:
+                error_data = response.json() if response.content else {}
+                retry_after = 15  # Default retry time in seconds
+                
+                # Try to extract the retry delay if available
+                if error_data and 'error' in error_data:
+                    for detail in error_data['error'].get('details', []):
+                        if '@type' in detail and 'RetryInfo' in detail['@type']:
+                            retry_delay = detail.get('retryDelay', '15s')
+                            # Extract the number from strings like "15s"
+                            retry_after = int(''.join(filter(str.isdigit, retry_delay))) or 15
+                
                 return jsonify({
-                    'response': "I'm receiving too many requests right now. Please try again in a moment.",
-                    'success': False
+                    'response': f"Rate limit reached. The Gemini API free tier allows only 2 requests per minute. Please wait {retry_after} seconds before trying again.",
+                    'success': False,
+                    'retry_after': retry_after
                 })
             
             return jsonify({
