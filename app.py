@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import logging
 import requests
@@ -21,6 +24,7 @@ def nl2br_filter(text):
 GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 GEMINI_MODEL = "gemini-1.5-pro-latest"
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+MAX_MEMORY_PROMPTS = 10  # Maximum number of previous prompts to remember
 
 # Computer Science prompt template
 SYSTEM_PROMPT = """
@@ -28,6 +32,9 @@ You are an AI Assistant specializing in Computer Science.
 
 Your task is to ONLY answer questions strictly related to Computer Science.  
 If the user's question is outside the Computer Science domain (like cooking, sports, movies, etc.), politely refuse to answer.
+
+Previous user messages (for context):
+{conversation_memory}
 
 Current user's message: "{user_input}"
 
@@ -94,11 +101,23 @@ def format_response(text):
     
     return text
 
+def format_conversation_memory(prompts_memory):
+    """Format the previous user prompts as context for the AI"""
+    if not prompts_memory:
+        return "None"
+    
+    formatted_memory = ""
+    for i, prompt in enumerate(prompts_memory):
+        formatted_memory += f"[{i+1}] {prompt}\n"
+    
+    return formatted_memory
+
 @app.route('/')
 def index():
     # Initialize or clear session data for a new conversation
     if 'chat_history' not in session:
         session['chat_history'] = []
+        session['prompts_memory'] = []  # Initialize memory for previous prompts
         
         # Only add welcome message if this is a brand new session
         if len(session['chat_history']) == 0:
@@ -118,17 +137,34 @@ def chat():
         data = request.json
         user_message = data.get('message', '')
         
-        # Add user message to chat history
+        # Initialize session variables if they don't exist
         if 'chat_history' not in session:
             session['chat_history'] = []
         
+        if 'prompts_memory' not in session:
+            session['prompts_memory'] = []
+        
+        # Add user message to chat history
         session['chat_history'].append({
             'role': 'user',
             'content': user_message
         })
         
-        # Create the system prompt with the user message
-        formatted_prompt = SYSTEM_PROMPT.format(user_input=user_message)
+        # Add user message to prompts memory (limiting to MAX_MEMORY_PROMPTS)
+        prompts_memory = session.get('prompts_memory', [])
+        prompts_memory.append(user_message)
+        if len(prompts_memory) > MAX_MEMORY_PROMPTS:
+            prompts_memory = prompts_memory[-MAX_MEMORY_PROMPTS:]  # Keep only the most recent ones
+        session['prompts_memory'] = prompts_memory
+        
+        # Format the conversation memory for context
+        conversation_memory = format_conversation_memory(prompts_memory[:-1])  # Exclude current message
+        
+        # Create the system prompt with the user message and conversation memory
+        formatted_prompt = SYSTEM_PROMPT.format(
+            user_input=user_message,
+            conversation_memory=conversation_memory
+        )
         
         # Prepare the request to Gemini API
         url = f"{GEMINI_API_BASE_URL}/models/{GEMINI_MODEL}:generateContent?key={GEMINI_API_KEY}"
@@ -211,8 +247,9 @@ def chat():
 
 @app.route('/clear', methods=['POST'])
 def clear_chat():
-    # Clear the chat history in the session
+    # Clear the chat history and prompts memory in the session
     session['chat_history'] = []
+    session['prompts_memory'] = []  # Also clear the prompts memory
     
     # Add welcome message after clearing
     welcome_message = get_welcome_message()
